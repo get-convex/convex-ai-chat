@@ -28,11 +28,9 @@ export const answer = internalAction({
       limit: 8,
     });
 
-    const relevantDocuments = await map(
-      searchResults,
-      async ({ _id: embeddingId }) =>
-        await ctx.runQuery(internal.serve.getChunk, { embeddingId })
-    );
+    const relevantDocuments = await ctx.runQuery(internal.serve.getChunks, {
+      embeddingIds: searchResults.map(({ _id }) => _id),
+    });
 
     const messageId = await ctx.runMutation(internal.serve.addBotMessage, {
       sessionId,
@@ -92,12 +90,16 @@ export const getMessages = internalQuery(
   }
 );
 
-export const getChunk = internalQuery(
-  async (ctx, { embeddingId }: { embeddingId: Id<"embeddings"> }) => {
-    return (await ctx.db
-      .query("chunks")
-      .withIndex("byEmbeddingId", (q) => q.eq("embeddingId", embeddingId))
-      .unique())!;
+export const getChunks = internalQuery(
+  async (ctx, { embeddingIds }: { embeddingIds: Id<"embeddings">[] }) => {
+    return await map(
+      embeddingIds,
+      async (embeddingId) =>
+        (await ctx.db
+          .query("chunks")
+          .withIndex("byEmbeddingId", (q) => q.eq("embeddingId", embeddingId))
+          .unique())!
+    );
   }
 );
 
