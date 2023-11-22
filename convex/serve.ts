@@ -11,6 +11,8 @@ import { embedTexts } from "./ingest/embed";
 import { internal } from "./_generated/api";
 import { Id } from "./_generated/dataModel";
 
+const OPENAI_MODEL = "gpt-3.5-turbo";
+
 export const answer = internalAction({
   args: {
     sessionId: v.string(),
@@ -39,7 +41,7 @@ export const answer = internalAction({
     try {
       const openai = new OpenAI();
       const stream = await openai.chat.completions.create({
-        model: "gpt-4-32k",
+        model: OPENAI_MODEL,
         stream: true,
         messages: [
           {
