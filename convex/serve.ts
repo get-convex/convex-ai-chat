@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import { map } from "modern-async";
 import OpenAI from "openai";
-import { ChatCompletionMessageParam } from "openai/resources";
+import { ChatCompletionMessageParam } from "openai/resources/index";
 import {
   internalAction,
   internalMutation,
