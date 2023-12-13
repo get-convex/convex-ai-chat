@@ -64,9 +64,9 @@ export const answer = internalAction({
       });
       let text = "";
       for await (const { choices } of stream) {
-        const chunk = choices[0].delta.content;
-        if (typeof chunk === "string" && chunk.length > 0) {
-          text += choices[0].delta.content;
+        const replyDelta = choices[0].delta.content;
+        if (typeof replyDelta === "string" && replyDelta.length > 0) {
+          text += replyDelta;
           await ctx.runMutation(internal.serve.updateBotMessage, {
             messageId,
             text,
