@@ -162,6 +162,7 @@ export function Dialog({
 
   return (
     <div
+      id="convex-ai-chat"
       className={
         (isOpen ? "fixed" : "hidden") +
         " rounded-xl flex flex-col bg-white dark:bg-black text-black dark:text-white " +
